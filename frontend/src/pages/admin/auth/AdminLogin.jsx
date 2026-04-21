@@ -6,20 +6,27 @@ import { Api, handleApiError } from "../../../helper/ApiHelper";
 const AdminLogin = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [data, setData] = useState({
+    email: "",
+    password: "",
+  });
   const [loading, setLoading] = useState(false);
+
+  const inputHandler = (e) => {
+    const { name, value } = e.target;
+    setData({ ...data, [name]: value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    console.log(data);
 
     try {
       // const response = await Api.post("/admin/login", { email, password });
       // const { user, token } = response.data;
-
-      login("user", "token");
-      navigate("/admin/dashboard");
+      // login("user", "token");
+      // navigate("/admin/dashboard");
     } catch (error) {
       handleApiError(error);
     } finally {
@@ -51,8 +58,9 @@ const AdminLogin = () => {
               </label>
               <input
                 type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={data.email}
+                name="email"
+                onChange={(e) => inputHandler(e)}
                 className="w-full bg-slate-900/50 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-slate-600"
                 placeholder="admin@example.com"
                 required
@@ -65,8 +73,9 @@ const AdminLogin = () => {
               </label>
               <input
                 type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                name="password"
+                value={data.password}
+                onChange={(e) => inputHandler(e)}
                 className="w-full bg-slate-900/50 border border-slate-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all placeholder:text-slate-600"
                 placeholder="••••••••"
                 required

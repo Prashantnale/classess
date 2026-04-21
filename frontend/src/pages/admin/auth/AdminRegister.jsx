@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Api } from "../../../helper/ApiHelper";
 
 const AdminRegister = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState({});
   const [formData, setFormData] = useState({
-    fullName: "",
+    full_name: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -13,9 +16,18 @@ const AdminRegister = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Registration attempt:", formData);
+    try {
+      if (formData.password === formData.confirmPassword) {
+        await Api.post("/admin/register", formData);
+        navigate("/admin/login");
+      } else {
+        alert("password not match");
+      }
+    } catch (error) {
+      setError(error.response.data.error);
+    }
   };
 
   return (
@@ -36,20 +48,24 @@ const AdminRegister = () => {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Full Name</label>
+              <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                Full Name
+              </label>
               <input
                 type="text"
-                name="fullName"
-                value={formData.fullName}
+                name="full_name"
+                value={formData.full_name}
                 onChange={handleChange}
                 className="w-full bg-slate-900/50 border border-slate-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-sm"
                 placeholder="John Doe"
-                required
               />
+              <span className="text-white">{error.full_name}</span>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Email Address</label>
+              <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                Email Address
+              </label>
               <input
                 type="email"
                 name="email"
@@ -57,13 +73,15 @@ const AdminRegister = () => {
                 onChange={handleChange}
                 className="w-full bg-slate-900/50 border border-slate-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-sm"
                 placeholder="admin@example.com"
-                required
               />
+              <span className="text-white">{error.email}</span>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
+                <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                  Password
+                </label>
                 <input
                   type="password"
                   name="password"
@@ -71,11 +89,12 @@ const AdminRegister = () => {
                   onChange={handleChange}
                   className="w-full bg-slate-900/50 border border-slate-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-sm"
                   placeholder="••••••••"
-                  required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1.5">Confirm</label>
+                <label className="block text-sm font-medium text-slate-300 mb-1.5">
+                  Confirm
+                </label>
                 <input
                   type="password"
                   name="confirmPassword"
@@ -83,7 +102,6 @@ const AdminRegister = () => {
                   onChange={handleChange}
                   className="w-full bg-slate-900/50 border border-slate-700 text-white rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-sm"
                   placeholder="••••••••"
-                  required
                 />
               </div>
             </div>
@@ -98,7 +116,10 @@ const AdminRegister = () => {
 
           <p className="mt-8 text-center text-slate-400 text-sm">
             Already have an account?{" "}
-            <Link to="/admin/login" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+            <Link
+              to="/admin/login"
+              className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors"
+            >
               Sign in instead
             </Link>
           </p>
