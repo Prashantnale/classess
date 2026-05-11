@@ -55,6 +55,8 @@ const sessionRemove = () => {
 };
 
 const handleApiError = (error, setError = null, addToast = null) => {
+  console.log(error);
+
   if (error.response && error.response.status === 422) {
     if (setError) setError(error.response.data.errors || {});
     if (addToast) addToast("Please fix the validation errors", "danger");

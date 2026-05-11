@@ -20,15 +20,18 @@ const AdminLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(data);
-
     try {
-      // const response = await Api.post("/admin/login", { email, password });
-      // const { user, token } = response.data;
-      // login("user", "token");
-      // navigate("/admin/dashboard");
+      const response = await Api.post("/admin/login", {
+        email: data.email,
+        password: data.password,
+      });
+      const { user, token } = response.data;
+      login(user, token);
+      navigate("/admin/dashboard");
     } catch (error) {
-      handleApiError(error);
+      console.log(error);
+
+      // handleApiError(error);
     } finally {
       setLoading(false);
     }
