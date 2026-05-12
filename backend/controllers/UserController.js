@@ -26,11 +26,11 @@ const Login = async (req, res) => {
       },
     });
     if (!user) {
-      res.json({ msg: "user name and password not found" });
+      res.status(422).json({ msg: "user name and password not found" });
     }
     const check = await bcrypt.compare(data.password, user.password);
     if (!check) {
-      res.json({ msg: "user name and password not found" });
+      res.status(422).json({ msg: "user name and password not found" });
     }
 
     const singData = {
@@ -45,7 +45,7 @@ const Login = async (req, res) => {
 
     res.json({ user: safeUser, token: token });
   } catch (error) {
-    return res.json({ msg: "user name and password not found" });
+    return res.status(422).json({ msg: "user name and password not found" });
   }
 };
 

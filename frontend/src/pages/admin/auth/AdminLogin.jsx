@@ -29,8 +29,7 @@ const AdminLogin = () => {
       login(user, token);
       navigate("/admin/dashboard");
     } catch (error) {
-      console.log(error);
-
+      console.log(error.response.data.msg);
       // handleApiError(error);
     } finally {
       setLoading(false);
