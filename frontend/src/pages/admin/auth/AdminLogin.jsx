@@ -27,7 +27,7 @@ const AdminLogin = () => {
       });
       const { user, token } = response.data;
       login(user, token);
-      navigate("/admin/dashboard");
+      navigate("/admin/product");
     } catch (error) {
       console.log(error.response.data.msg);
       // handleApiError(error);

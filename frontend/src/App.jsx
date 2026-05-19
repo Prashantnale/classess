@@ -7,6 +7,11 @@ import Home from "./pages/website/Home";
 import PublicRoute from "./components/PublicRoutes";
 import PrivateRoute from "./components/PrivateRoutes";
 
+// Product Pages
+import ProductIndex from "./pages/admin/product/Index";
+import ProductCreate from "./pages/admin/product/Create";
+import ProductEdit from "./pages/admin/product/Edit";
+
 function App() {
   return (
     <AuthProvider>
@@ -41,15 +46,24 @@ function App() {
             }
           />
 
-          {/* Private */}
+          {/* Private - Dashboard Layout with nested routes */}
           <Route
-            path="/admin/dashboard"
+            path="/admin"
             element={
               <PrivateRoute>
                 <Dashboard />
               </PrivateRoute>
             }
-          />
+          >
+            {/* /admin/product → Product List */}
+            <Route path="product" element={<ProductIndex />} />
+
+            {/* /admin/product/create → Add Product */}
+            <Route path="product/create" element={<ProductCreate />} />
+
+            {/* /admin/product/edit/:id → Edit Product */}
+            <Route path="product/edit/:id" element={<ProductEdit />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
