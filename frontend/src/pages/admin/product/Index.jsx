@@ -79,11 +79,14 @@ const Index = () => {
                   <td style={styles.td}>
                     {Array.isArray(product.tags) && product.tags.length > 0 ? (
                       <div style={styles.tagsList}>
-                        {product.tags.map((tag) => (
-                          <span key={tag} style={styles.tagBadge}>
-                            {tag}
-                          </span>
-                        ))}
+                        {product.tags.map((tag, idx) => {
+                          const tagText = typeof tag === "object" ? tag.value : tag;
+                          return (
+                            <span key={`${product.id}-${idx}`} style={styles.tagBadge}>
+                              {tagText}
+                            </span>
+                          );
+                        })}
                       </div>
                     ) : (
                       "-"
