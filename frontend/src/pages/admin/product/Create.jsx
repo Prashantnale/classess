@@ -56,7 +56,7 @@ const Create = () => {
       alert("Product created successfully!");
       setLoading(false);
 
-      // navigate("/admin/product");
+      navigate("/admin/product");
     } catch (error) {
       handleApiError(error, setErrors);
     } finally {
