@@ -27,36 +27,36 @@ const Create = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  console.log(selectedTags);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImageFile(file);
       const reader = new FileReader();
-      reader.onloadend = () => setImagePreview(reader.result);
       reader.readAsDataURL(file);
+      reader.onloadend = () => setImagePreview(reader.result);
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setErrors({});
 
-    const tagsArray = selectedTags.map((tag) => tag.value);
+    const data = {
+      name: name,
+      description: description,
+      price: price,
+      tags: JSON.stringify(selectedTags),
+      image: imageFile,
+    };
 
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("description", description);
-    formData.append("price", price);
-    formData.append("tags", JSON.stringify(tagsArray));
-    if (imageFile) {
-      formData.append("image", imageFile);
-    }
     try {
-      await Api.post("/products", formData);
+      await Api.post("/products", data);
       alert("Product created successfully!");
-      navigate("/admin/product");
+      setLoading(false);
+
+      // navigate("/admin/product");
     } catch (error) {
       handleApiError(error, setErrors);
     } finally {
@@ -145,7 +145,6 @@ const Create = () => {
             value={selectedTags}
             onChange={setSelectedTags}
             placeholder="Select tags..."
-            closeMenuOnSelect={false}
           />
         </div>
 

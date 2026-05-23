@@ -6,7 +6,7 @@ const BASE_URL = "http://localhost:4000";
 const Api = axios.create({
   baseURL: `${BASE_URL}/api`,
   headers: {
-    Accept: "application/json",
+    "Accept": "application/json",
     "Content-Type": "application/json",
   },
 });

@@ -17,6 +17,8 @@ const create = async (req, res) => {
 
     res.status(201).json({ product, msg: "Product created successfully" });
   } catch (error) {
+    console.log(error);
+
     var err = {};
     if (error.errors) {
       error.errors.forEach((element) => {
