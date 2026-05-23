@@ -4,15 +4,13 @@ const path = require("path");
 
 const create = async (req, res) => {
   try {
-    const { name, description, price, tags } = req.body;
+    const data = req.body;
     const image = req.file ? req.file.filename : null;
 
     const product = await Product.create({
-      name,
-      description,
-      price,
-      image,
-      tags: tags ? JSON.parse(tags) : [],
+      ...data,
+      image: image,
+      tags: data.tags ? JSON.parse(data.tags) : [],
     });
 
     res.status(201).json({ product, msg: "Product created successfully" });
