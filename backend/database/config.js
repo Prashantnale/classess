@@ -1,10 +1,15 @@
 const { Sequelize } = require("sequelize");
 
-const sequelize = new Sequelize({
-  dialect: "sqlite",
-  storage: "./db/database.sqlite",
-  logging: false,
-});
+const sequelize = new Sequelize(
+  "demo",
+  "root",
+  "",
+  {
+    host: "localhost",
+    dialect: "mysql",
+    logging: false,
+  }
+);
 
 sequelize
   .authenticate()
