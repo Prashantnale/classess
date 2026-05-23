@@ -145,6 +145,7 @@ const Create = () => {
             value={selectedTags}
             onChange={setSelectedTags}
             placeholder="Select tags..."
+            closeMenuOnSelect={false}
           />
         </div>
 
