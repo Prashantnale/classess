@@ -19,8 +19,8 @@ const create = async (req, res) => {
 
     var err = {};
     if (error.errors) {
-      error.errors.forEach((element) => {
-        err = { ...err, [element.path]: element.message };
+      Object.keys(error.errors).forEach((key) => {
+        err = { ...err, [key]: error.errors[key].message };
       });
     }
     res.status(422).json({ msg: "Validation error", errors: err });
@@ -29,7 +29,7 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
   try {
-    const products = await Product.findAll({ order: [["id", "DESC"]] });
+    const products = await Product.find().sort({ _id: -1 });
     res.json({ products });
   } catch (error) {
     res.status(500).json({ msg: "Internal server error" });
@@ -38,7 +38,7 @@ const getAll = async (req, res) => {
 
 const getOne = async (req, res) => {
   try {
-    const product = await Product.findByPk(req.params.id);
+    const product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({ msg: "Product not found" });
     }
@@ -50,12 +50,12 @@ const getOne = async (req, res) => {
 
 const update = async (req, res) => {
   try {
-    const product = await Product.findByPk(req.params.id);
+    const product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({ msg: "Product not found" });
     }
 
-    const { name, description, price, tags } = req.body;
+    let updateData = { ...req.body };
 
     if (req.file) {
       if (product.image) {
@@ -64,22 +64,25 @@ const update = async (req, res) => {
           fs.unlinkSync(oldImagePath);
         }
       }
-      product.image = req.file.filename;
+      updateData.image = req.file.filename;
     }
 
-    product.name = name;
-    product.description = description;
-    product.price = price;
-    product.tags = tags ? JSON.parse(tags) : [];
+    if (updateData.tags) {
+      updateData.tags = JSON.parse(updateData.tags);
+    }
 
-    await product.save();
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true, runValidators: true }
+    );
 
-    res.json({ product, msg: "Product updated successfully" });
+    res.json({ product: updatedProduct, msg: "Product updated successfully" });
   } catch (error) {
     var err = {};
     if (error.errors) {
-      error.errors.forEach((element) => {
-        err = { ...err, [element.path]: element.message };
+      Object.keys(error.errors).forEach((key) => {
+        err = { ...err, [key]: error.errors[key].message };
       });
     }
     res.status(422).json({ msg: "Validation error", errors: err });
@@ -88,7 +91,7 @@ const update = async (req, res) => {
 
 const remove = async (req, res) => {
   try {
-    const product = await Product.findByPk(req.params.id);
+    const product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({ msg: "Product not found" });
     }
@@ -100,7 +103,7 @@ const remove = async (req, res) => {
       }
     }
 
-    await product.destroy();
+    await Product.findByIdAndDelete(req.params.id);
     res.json({ msg: "Product deleted successfully" });
   } catch (error) {
     res.status(500).json({ msg: "Internal server error" });

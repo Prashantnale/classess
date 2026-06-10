@@ -1,56 +1,18 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../database/config");
+const mongoose = require("mongoose");
 
-const User = sequelize.define(
-  "Users",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    full_name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: "Full Name can not be emty",
-        },
-        notNull: {
-          msg: "Full name is require",
-        },
-      },
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: "Email can not be emty",
-        },
-        notNull: {
-          msg: "Email is require",
-        },
-      },
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: "Password can not be emty",
-        },
-        notNull: {
-          msg: "Password is require",
-        },
-      },
-    },
+const userSchema = new mongoose.Schema({
+  full_name: {
+    type: String,
+    required: [true, "Full name is require"],
   },
-  {
-    timestamps: true,
+  email: {
+    type: String,
+    required: [true, "Email is require"],
   },
-);
+  password: {
+    type: String,
+    required: [true, "Password is require"],
+  },
+}, { timestamps: true });
 
-User.sync();
-
-module.exports = User;
+module.exports = mongoose.model("User", userSchema);

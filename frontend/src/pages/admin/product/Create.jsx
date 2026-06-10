@@ -120,7 +120,7 @@ const Create = () => {
             onChange={handleImageChange}
             style={styles.fileInput}
           />
-          {imagePreview && (
+          {imagePreview ? (
             <div style={styles.previewBox}>
               <img src={imagePreview} alt="Preview" style={styles.preview} />
               <button
@@ -134,7 +134,7 @@ const Create = () => {
                 ✕ Remove
               </button>
             </div>
-          )}
+          ) : ""}
         </div>
 
         <div style={styles.formGroup}>

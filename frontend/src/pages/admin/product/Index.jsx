@@ -60,7 +60,7 @@ const Index = () => {
             </thead>
             <tbody>
               {products.map((product, index) => (
-                <tr key={product.id} style={styles.tr}>
+                <tr key={product._id} style={styles.tr}>
                   <td style={styles.td}>{index + 1}</td>
                   <td style={styles.td}>
                     {product.image ? (
@@ -82,7 +82,7 @@ const Index = () => {
                         {product.tags.map((tag, idx) => {
                           const tagText = typeof tag === "object" ? tag.value : tag;
                           return (
-                            <span key={`${product.id}-${idx}`} style={styles.tagBadge}>
+                            <span key={`${product._id}-${idx}`} style={styles.tagBadge}>
                               {tagText}
                             </span>
                           );
@@ -95,14 +95,14 @@ const Index = () => {
                   <td style={styles.td}>
                     <button
                       onClick={() =>
-                        navigate(`/admin/product/edit/${product.id}`)
+                        navigate(`/admin/product/edit/${product._id}`)
                       }
                       style={styles.editBtn}
                     >
                       ✏️ Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(product.id)}
+                      onClick={() => handleDelete(product._id)}
                       style={styles.deleteBtn}
                     >
                       🗑️ Delete

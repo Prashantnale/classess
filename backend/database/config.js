@@ -1,23 +1,11 @@
-const { Sequelize } = require("sequelize");
+const mongoose = require("mongoose");
 
-const sequelize = new Sequelize(
-  "demo",
-  "root",
-  "",
-  {
-    host: "localhost",
-    dialect: "mysql",
-    logging: false,
-  }
-);
-
-sequelize
-  .authenticate()
+mongoose.connect("mongodb://127.0.0.1:27017/demo")
   .then(() => {
-    console.log("database conncation successfully");
+    console.log("database connection successfully");
   })
   .catch((error) => {
-    console.log("Error : ", error);
+    console.log(error);
   });
 
-module.exports = sequelize;
+module.exports = mongoose;
